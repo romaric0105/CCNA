@@ -1,3 +1,3 @@
 ﻿#creating web apps
-New-Website -name "ngcp website" -hostheader "www.ngcpM.com" -physicalpath "c:\webs\datingbiz"
+New-Website -name "ccna12b website" -hostheader "www.ccna12b.com" -physicalpath "d:\webs\appgbiz"
 						   
