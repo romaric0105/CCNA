@@ -1,5 +1,5 @@
 ﻿Install-WindowsFeature  -name dns  -includeManagementTools
-Add-DnsServerPrimaryZone -Name "ccna12b.com" -ZoneFile "CCNA12.dns"
+Add-DnsServerPrimaryZone -Name "ccna12b.com" -ZoneFile "ccna12b.dns"
 add-DnsServerResourceRecord -zonename ccna12b.com -A -name ns  -ipv4address 10.12.1.10
 add-DnsServerResourceRecord -zonename ccna12b.com -Cname -name www -hostname ns.ccna12b.com
 add-DnsServerResourceRecord -zonename ccna12b.com -Cname -name imap -hostname ns.ccna12b.com
