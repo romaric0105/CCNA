@@ -107,7 +107,8 @@ route  add 10.m.0.0 mask 255.255.0.0 10.m.1.4 -p
 How to Create Default Route Cisco/PC/EndDevices:
 p1:
 config T
-ip route 0.0.0.0  0.0.0.0 10.2.1.1
+ip route 0.0.0.0  0.0.0.0 10.2.1.2 1
+ip route 0.0.0.0  0.0.0.0 10.2.1.1 2
 do sh ip route static
 
 p2:
@@ -167,6 +168,12 @@ router eigrp 100
  network 10.1.4.8 0.0.0.3
  network 10.1.4.4 0.0.0.3
  end
+!HOW TO CHECK IF EIGRP IS WORKING PROPERLY:
+show ip protocols show
+show ip EIGRP neigbors -- > super
+show ip eigrp topology -- > super, madami P, P lahat
+show ip eigrp traffic
+show ip route eigrp
 
 !!Multi Area OSPF FOR nETWOR eNGINEERS:
 OSPF NETWORK:
@@ -212,6 +219,19 @@ OSPF checking:
 sh ip protocols
 sh ip ospf neighbor
 sh ip ospf database
+
+@declaring link between r3  and r4 as p2p
+R3:
+config t
+interface e1/2
+ip ospf network point-to-point
+do sh ip ospf int e1/2
+
+R4:
+config t
+interface e1/2
+ip ospf network point-to-point
+do sh ip ospf int e1/2
 
 Task3: Eigrp and Ospf Redistribution:
 R4: sikat: Eigrp and OSPF world:
