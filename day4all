@@ -1,0 +1,469 @@
+MORNING TASK: 
+
+
+1. PASTE ALL THE COMMANDS/CONFIGURATIONS FOR DAY 1. 
+2. PING  AND CALL YOUR CLASSMATES.
+3. TROUBLESHOOT FOR ERRORS. 
+
+DA4: FUNDAMENTALS OF NETWORK SECURITY:
+task1: OSI layer mastery:
+7: app layer: telnet,ssh,http,https,fbm,etc.
+6: pre layaer: .exe, .vbs, .bat, .pl., 
+5: session: netbios, sql, nfs
+   cmd, ping 10.k.1.10
+   nmap -v 10.k.1.10
+4: transport: get hired
+ ssh, telnet, dns, ftp, http, pop, smtp
+3: Network: ip address + subnetting:
+5hitcombo:  192.168.10.89 /27
+net:        .64
+range:  .65-.95
+brod:   .95
+totalHost:  2r5 = 32-2
+2: DataLink: Ethernet Frames: mac address.
+how bits is a MacAddress: 48 bits
+cmd
+arp -a
+
+TASK2: HOW TO KNOW IF YOU ARE GETTING HACKED?
+3 WAY HANDSHAKE:
+pc                        cucm:
+hACKER  --------------->  victim
+           SYN:sp,dp:
+      <------------------
+            ACK:sp,dp:
+   <-------------------->
+          Established: Pasok na pasok:
+CUCM-12#show control-plane host open-ports
+how to know in windows if you are Getting HACKED at HOme!!
+netstat -s -p tcp
+
+TASK2: IMPLEMENTING BASIC CISCO NETWORK SECURITY using
+access-control List:
+STANDARD ACL: 1-99, JOB block or permit Networks/IP:
+ping 10.12.1.10
+TASK1: Create a Standard ACL to permit only your Side:
+@EDGE:
+config t
+No access-list 1
+access-list 1 permit 10.k1.0.0 0.0.255.255
+access-list 1 permit 10.k2.0.0 0.0.255.255
+access-list 1 permit 10.k3.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group 1 in
+  do sh ip access-list 1
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG
+IP access-list Standard KAMILANG
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG in
+  do sh ip access-list KAMILANG
+-----------------------------------------
+@EDGE:
+config t
+No access-list 2
+access-list 2 permit 10.k1.0.0 0.0.255.255
+access-list 2 permit 10.k2.0.0 0.0.255.255
+access-list 2 permit 10.k3.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group 2 in
+  do sh ip access-list 2
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG2
+IP access-list Standard KAMILANG2
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG2 in
+  do sh ip access-list KAMILANG2
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG3
+IP access-list Standard KAMILANG3
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG3 in
+  do sh ip access-list KAMILANG3
+------------------------
+config t
+Int Gi 0/0/1
+  NO ip access-group KAMILANG3 in
+
+task3: give internet to EDGE:
+CONFIG T
+IP ROUTE 0.0.0.0  0.0.0.0  200.0.0.1
+do ping 200.0.0.1
+DO PING 8.8.8.8
+ip domain-lookup
+ip name-server 8.8.8.8 1.1.1.1
+do ping www.cisco.com
+
+TASK4:  BLOCK ALL PORN SITES: trivia:
+all the porn sites in the world is Owned by 5 companies
+config t
+CONFIG T
+no IP access-list Standard NOPORN
+IP access-list Standard NOPORN
+Deny 66.254.0.0 0.0.255.255
+deny 104.21.0.0 0.0.255.255
+deny 68.235.0.0 0.0.255.255
+deny 104.21.0.0 0.0.255.255
+deny 208.77.20.0 0.0.255.255
+deny 172.67.133.0 0.0.255.255
+permit any
+INT GI 0/0/1
+ IP ACCESS-group NOPORN IN
+ do PING WWW.CISCO.COM
+ do ping www.nba.com
+ do ping www.pornhub.com
+
+TASK5: USING CISCO TO GIVE INTERNET TO ENTIRE BUILDINGS:
+
+BLDG2:192.168.102.20/24  GI2
+                            VPNPH  GI1 -- iNTERNET
+BLDG3:192.168.103.20/24  GI3
+
+TASK1: BASIC CISCO CONFIGS:
+vpnph:
+config t
+no logging console
+int gi 2
+no shut
+ip add 192.168.102.8 255.255.255.0
+line vty 0 14
+ exec-timeout 0 0
+
+TASK2: GIVE IP address and internet to VPNPH:
+config t
+int gi 1
+no shut
+ip add 192.168.108.8 255.255.255.0
+int gi 3
+no shut
+ip add 192.168.103.8 255.255.255.0
+ip  route  0.0.0.0  0.0.0.0  192.168.108.2
+ip  name-server 8.8.8.8 1.1.1.1
+do ping 8.8.8.8
+
+TASK3: NETWORK ADDRESS TRANSLATION/ NAT: GIVE INTERNET TO ENITIRE
+BUILDING/COMPANY:
+Buidg2 will Dyanmic NAT using Gi 1
+Buildg3 wil use Static NAT mapping using 192.168.108.69
+config t
+access-list 8 permit 192.168.102.0 0.0.0.255
+access-list 8 permit 192.168.103.0 0.0.0.255
+Int Gi 1
+  ip nat OUTSIDE
+Int Gi 2
+  ip nat INSIDE
+Int Gi 3
+  ip nat INSIDE
+ip   nat  inside  source static 192.168.103.20  192.168.108.69
+ip   nat  inside source list 8 interface gi 1 overload
+
+task5: Protecting webapps and websites with basic
+firewall configs:
+config t
+int Gi 3
+ no shut
+ ip add 192.168.103.8 255.255.255.0
+ ip add 192.168.103.9 255.255.255.0 Secondary
+service finger
+service tcp-small-servers
+service udp-small-servers
+ip dns server
+ip http server
+ip http secure-server
+!Make Ping EASY
+ip host www.web8.com 192.168.103.8
+ip host www.web9.com 192.168.103.9
+
+EX.1 CREATE A FIREWALL POLICY NAMED BANTAYWEB1 TO OPEN
+WWW.WEB8.COM HAS HTTP AND HTTPS AS OPEN
+WWW.WEB9.COM HAS SSH AND DNS OPEN
+   formula:       PROTOCOL    HACKER    VICTIM     PORT:
+           tcp,udp,icmp,ip     any      host       
+config t
+no ip access-list extended BANTAYWEB1
+ip access-list extended BANTAYWEB1
+   Permit  tcp  any  host www.web8.com  eq 80  log
+   Permit  tcp  any  host www.web8.com  eq 443  log
+   Permit  tcp  any  host www.web9.com  eq 22  log
+   Permit  tcp  any  host www.web9.com  eq 53  log
+Int gi 3
+ ip access-group BANTAYWEB1 in
+ do sh ip access-list BANTAYWEB1
+-------------------------------------------
+EX.2 CREATE A FIREWALL POLICY NAMED blueteam2 TO OPEN
+WWW.WEB8.COM HAS dns, ssh, http
+WWW.WEB9.COM HAS telnet, ssh, https = 6lines
+
+-------------------------------------------
+EX.3 CREATE A FIREWALL POLICY NAMED blueteam3 TO OPEN
+WWW.WEB8.COM HAS telnet,ssh,dns,http,
+WWW.WEB9.COM HAS icmp/ping, https   = 6 lines
+config t
+no ip access-list extended blueteam3
+ip access-list extended blueteam3
+   Permit  tcp  any  host www.web8.com  eq 23  log
+   Permit  tcp  any  host www.web8.com  eq 22  log
+   Permit  tcp  any  host www.web8.com  eq 53  log
+   Permit  tcp  any  host www.web8.com  eq 80 log
+   Permit  icmp any  host www.web9.comlog
+   Permit  tcp  any  host www.web9.com  eq 443  log
+int gi 3
+ ip access-group blueteam3 in
+
+-------------------------------------------
+EX.4 CREATE A FIREWALL POLICY NAMED blueteam3 TO OPEN
+WWW.WEB8.COM HAS chargen,daytime,finger,dns,ping
+WWW.WEB9.COM HAS dns,ssh,https
+
+#Bldg3:
+sudo  ifconfig  eth0  192.168.103.20 netmask 255.255.255.0 up
+sudo  route add default gw  192.168.103.8
+ping  192.168.103.8
+ping 8.8.8.8
+ping 1.1.1.1
+ping 4.2.2.2
+netstat -rn
+
+#Bldg2:
+sudo  ifconfig  eth0  192.168.102.20 netmask 255.255.255.0 up
+sudo  route add default gw  192.168.102.8
+ping  192.168.102.8
+ping 8.8.8.8
+ping 1.1.1.1
+ping 4.2.2.2
+netstat -rn
+
+TAS7: MASTERING IPV6 LIKE AN EXPERT:
+
+
+   8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+
+task8: IPV6 SUBNETTING: 
+EX1: SUBNET  fafa:caca:dada:bebe::/64 into Three Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+Convert: Three offices is 2 bits
+AddtoOrig/:  /64 + /2 = /66
+IchambaMO:
+             8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+1stoffice:         0   0  0  0  0  0   0  0  0  0   0  0  0  0 : 0000:
+2ndoffice:         0   0  0  0  0  0   0  0  0  0   0  0  0  0 : 4000
+3rdoffice:         0   0  0  0  0  0   0  0  0  0   0  0  0  0   8000
+
+EX2: SUBNET  fafa:caca:dada:bebe::/64 into 50 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+50 is 6 bits:
+Add: /64 + /6 =/70
+IchambaMo:
+          8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+1st:      0  0  0  0   0  0  -  -  -   -  -                 0000
+2nd:      0  0  0  0   0  1                                 0400
+3rd:      0  0   0  0  1  0                                 0800
+4th:      0  0   0  0  1  1                                 0c00
+5th       0  0   0  1  0  0                                 1000
+6th:      0  0   0  1  0  1                                 1400
+
+EX2: SUBNET  fafa:caca:dada:bebe::/64 into 400 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+C  400 is 9bitsd
+A /64 + /9 = /73
+iChambaMo:
+            8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+            0  0  0  0   0  0  0  0   0  -  -  -   -  -  -  - 0000
+2nd         0  0  0  0   0  0  0  0   1                       0080
+3rd         0  0  0  0   0  0  0  1   0                       0100
+4th                                                           0180
+5th                                                           0200
+6yh                                                           0280
+7th                                                           0300
+                                                              0380
+EX3: SUBNET  fafa:caca:dada:bebe::/64 into 2500 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+2500 is 12bitws
+/64 + /12 = /76
+iChambaMO:
+          8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+1st:      0  0  0  0   0  0  0  0   0  0  0  0
+           0000  0001  0002  0003  0004  0005
+
+EX6: SUBNET  fafa:caca:dada:bebe::/64 into 28 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+
+          8  4  2  1   8  4  2  1   8  4  2  1   8  4  2  1
+          0  0  0  0   0
+          0  0  0  0   1  
+          0  0  0  1   0
+          0  0  0  1   1
+          0  0  1  0   0
+
+EX6: SUBNET  fafa:caca:dada:bebe::/64 into 450 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+C: 450 is 9bits
+a /64+ 9 = /73
+iChamBA:
+        8  4  2  1   8  4  2  1   8
+1st     0  0  0  0   0  0  0  0   0    0000
+        0  0  0  0   0  0  0  0   1    0080
+       0  0  0  0   0  0  0  1   0     0100
+       0  0  0  0   0  0  0  q   1     0180
+                                       0200
+                                       0280
+CO0NFIGURE IT:
+CONFIG T
+ipv6 unicast-routing
+Int loopback 1
+ ipv6 address fafa:caca:dada:bebe::1/73
+ !
+Int loopback 2
+ ipv6 address fafa:caca:dada:bebe:0080::1/73
+ !
+Int loopback 3
+ ipv6 address fafa:caca:dada:bebe:0100::1/73
+ !
+Int loopback 4
+ ipv6 address fafa:caca:dada:bebe:0180::1/73
+ !
+Int loopback 5
+ ipv6 address fafa:caca:dada:bebe:0200::1/73
+ !
+Int loopback 6
+ ipv6 address fafa:caca:dada:bebe:0280::1/73
+ !
+Int loopback 6
+ ipv6 address fafa:caca:dada:bebe:0300::1/73
+ !
+Int loopback 7
+ ipv6 address fafa:caca:dada:bebe:0380::1/73
+ !
+EX6: SUBNET  face:cafe:face:cafe::/64 into 5000 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+and Configure 10 offices on the Router:
+config t
+Int loopback 1
+ ipv6 address face:cafe:face:cafe:0000::1/77
+ !
+Int loopback 2
+ ipv6 address face:cafe:face:cafe:0008::1/77
+ !
+Int loopback 3
+ ipv6 address face:cafe:face:cafe:0010::1/77
+ !
+Int loopback 4
+ ipv6 address face:cafe:face:cafe:0018::1/77
+ !
+BONUS ETO LALABAS SA EXAMTHIS OCTOBER::
+EX6: SUBNET  FEC0:FECO:AABB:DDEE:/64 into 6 Offices:
+Rivan CAI method: Convert, Add, iChambaMo
+and Configure 6 offices on the Router:
+C 3
+A 64 + 3 = 67
+I:
+   8  4  2  1   0  0  0
+   0  0  1                  2000
+   0  1  0                  4000
+   0  1  1                  6000
+   1  0  0                  8000
+   1  0  1                  A000
+   1 1  0                   C000
+
+EXAMNO.2: IPV4 AND IPV6 DUAL STACK SUBNETTED CONFIG: 2HIT COMBO:
+EX.8: DESIGN AND CONFIGURE A NETWORK FOR 
+10.0.0.0/8  AND     fc00:abef:deef::/48 into 100 offices Each.
+C: 100 is 7bits
+A: /8 + /7 = /15, 2nd,2i
+ipasok 2i sa 2nd:
+1st: 10.2.0.1/15
+2nd: 10.4.0.1/15
+3rd: 10.6.0.1/15
+4th: 10.8.0.1/15
+5th: 10.10.0.1/15
+config t
+int lo 1
+ ip add 10.2.0.1 255.254.0.0
+ ipv6 add fc00:abef:deef:0000::1/55
+int lo 2
+ ip add 10.4.0.1 255.254.0.0
+ ipv6 add fc00:abef:deef:0200::1/55
+int lo 3
+ ip add 10.6.0.1 255.254.0.0
+ ipv6 add fc00:abef:deef:0400::1/55
+int lo 4
+ ip add 10.8.0.1 255.254.0.0
+ ipv6 add fc00:abef:deef:0600::1/55
+
+SECURITY TASK NO.9: TELNET[not secure] VS SSH:[secure]
+configuring SSH on Cisco:
+CONFIG T
+ip domain-name rivanccna.com
+crypto key generate rsa
+               PLS PILLIN "1024"
+ip ssh version 2
+ip ssh time-out 120
+end
+
+SECURITY TASK NO.10: ftp: file transfer protocol:
+FTP is network file storate system that runs TCP port 21
+step1: set a FTP server:
+d:\_LAGAYDITO
+
+CUCM-12#copy run ftp:
+Address or name of remote host []? 10.12.1.10
+Destination filename [cucm-12-confg]? cucmSetp12.txt
+Writing cucmSetp12.txt !
+4410 bytes copied in 4.240 secs (1040 bytes/sec)
+
+NETWORK TIME PROTOCOL: NTP 
+synchrnozies all the time of Cisco devices:
+VPNFWPH#show clock 
+*16:13:17.456 UTC Thu Sep 12 2024
+VPNFWPH#  
+LAB ITO SA EXAM!!!!!!!!! NTP.
+configure Cisco to UseAmericanTime: Pacific:
+config t
+ntp  server  216.239.35.8
+end
+show ntp associations
+1.
+COMPUTE AND CONFIGURE: DUAL STACK:
+10.0.0.0/8 
+AND                into 1500 subnets:
+cafe:cafe:face:/48
+
+2.
+COMPUTE AND CONFIGURE: DUAL STACK:
+10.0.0.0/8 
+AND                into 100 subnets:
+cafe:cafe:face:/48
+                     POST YOUR ANSWERS IN CHAT GROUP!!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           
+
+
