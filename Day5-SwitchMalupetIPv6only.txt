@@ -719,26 +719,65 @@ config t
 ipv6 unicast-routing
 int loopback 1
 ipv6 address fafa:caca:dada:bebe::1/73
-!
+
 int loopback 2
 ipv6 address fafa:caca:dada:bebe:0080:1/73
-!
+
 int loopback 3
 ipv6 address fafa:caca:dada:bebe:0100:1/73
-!
+
 int loopback 4
 ipv6 address fafa:caca:dada:bebe:0180:1/73
-!
+
 int loopback 5
 ipv6 address fafa:caca:dada:bebe:0200:1/73
-!
+
 int loopback 6
 ipv6 address fafa:caca:dada:bebe:0280:1/73
-!
+
 int loopback 7
 ipv6 address fafa:caca:dada:bebe:0300:1/73
-!
+
 int loopback 8
 ipv6 address fafa:caca:dada:bebe:0380:1/73
+
+EXAM NO: IPV4 and IPV6 DUAL STACK SUBNETTED CONFIG:2 HIT COMBO
+
+config t
+int lo 1
+ip add 10.2.0.1 255.254.0.0
+ipv6 add fc00:abef:deff:0000::1/55
+int lo 2
+ip add 10.4.0.1 255.254.0.0
+ipv6 add fc00:abef:deff:0200::1/55
+
+int lo 3
+ip add 10.6.0.1 255.254.0.0
+ipv6 add fc00:abef:deff:0400::1/55
+
+int lo 4
+ip add 10.8.0.1 255.254.0.0
+ipv6 add fc00:abef:deff:0600::1/55
+
+int lo 5
+ip add 10.10.0.1 255.254.0.0
+ipv6 add fc00:abef:deff:0800::1/55
+
+SECURITY TASK NO 9
+TELNET [not secure] vs SSH: [secure]
+configuring ssh on Cisco:
+config t
+ip domain-name rivancca.com
+crypto key generate rsa
+"1024"
+ip ssh version 2
+ip ssh time-out 120
+end
+
+SECURITY TASK 10 fTP 
+FTP is network file storage system that runs tcp port 21
+step1: set a FTP server:
+
+
 
 
