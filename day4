@@ -1,0 +1,237 @@
+MORNING TASK: 
+
+
+1. PASTE ALL THE COMMANDS/CONFIGURATIONS FOR DAY 1. 
+2. PING  AND CALL YOUR CLASSMATES.
+3. TROUBLESHOOT FOR ERRORS. 
+
+DA4: FUNDAMENTALS OF NETWORK SECURITY:
+task1: OSI layer mastery:
+7: app layer: telnet,ssh,http,https,fbm,etc.
+6: pre layaer: .exe, .vbs, .bat, .pl., 
+5: session: netbios, sql, nfs
+   cmd, ping 10.k.1.10
+   nmap -v 10.k.1.10
+4: transport: get hired
+ ssh, telnet, dns, ftp, http, pop, smtp
+3: Network: ip address + subnetting:
+5hitcombo:  192.168.10.89 /27
+net:        .64
+range:  .65-.95
+brod:   .95
+totalHost:  2r5 = 32-2
+2: DataLink: Ethernet Frames: mac address.
+how bits is a MacAddress: 48 bits
+cmd
+arp -a
+
+TASK2: HOW TO KNOW IF YOU ARE GETTING HACKED?
+3 WAY HANDSHAKE:
+pc                        cucm:
+hACKER  --------------->  victim
+           SYN:sp,dp:
+      <------------------
+            ACK:sp,dp:
+   <-------------------->
+          Established: Pasok na pasok:
+CUCM-12#show control-plane host open-ports
+how to know in windows if you are Getting HACKED at HOme!!
+netstat -s -p tcp
+
+TASK2: IMPLEMENTING BASIC CISCO NETWORK SECURITY using
+access-control List:
+STANDARD ACL: 1-99, JOB block or permit Networks/IP:
+ping 10.12.1.10
+TASK1: Create a Standard ACL to permit only your Side:
+@EDGE:
+config t
+No access-list 1
+access-list 1 permit 10.k1.0.0 0.0.255.255
+access-list 1 permit 10.k2.0.0 0.0.255.255
+access-list 1 permit 10.k3.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group 1 in
+  do sh ip access-list 1
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG
+IP access-list Standard KAMILANG
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG in
+  do sh ip access-list KAMILANG
+-----------------------------------------
+@EDGE:
+config t
+No access-list 2
+access-list 2 permit 10.k1.0.0 0.0.255.255
+access-list 2 permit 10.k2.0.0 0.0.255.255
+access-list 2 permit 10.k3.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group 2 in
+  do sh ip access-list 2
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG2
+IP access-list Standard KAMILANG2
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG2 in
+  do sh ip access-list KAMILANG2
+---- ANOTHER VERSION -------
+CONFIG T
+no IP access-list Standard KAMILANG3
+IP access-list Standard KAMILANG3
+	permit 10.k1.0.0 0.0.255.255
+        permit 10.k1.0.0 0.0.255.255
+Int Gi 0/0/1
+  ip access-group KAMILANG3 in
+  do sh ip access-list KAMILANG3
+------------------------
+config t
+Int Gi 0/0/1
+  NO ip access-group KAMILANG3 in
+
+task3: give internet to EDGE:
+CONFIG T
+IP ROUTE 0.0.0.0  0.0.0.0  200.0.0.1
+do ping 200.0.0.1
+DO PING 8.8.8.8
+ip domain-lookup
+ip name-server 8.8.8.8 1.1.1.1
+do ping www.cisco.com
+
+TASK4:  BLOCK ALL PORN SITES: trivia:
+all the porn sites in the world is Owned by 5 companies
+config t
+CONFIG T
+no IP access-list Standard NOPORN
+IP access-list Standard NOPORN
+Deny 66.254.0.0 0.0.255.255
+deny 104.21.0.0 0.0.255.255
+deny 68.235.0.0 0.0.255.255
+deny 104.21.0.0 0.0.255.255
+deny 208.77.20.0 0.0.255.255
+deny 172.67.133.0 0.0.255.255
+permit any
+INT GI 0/0/1
+ IP ACCESS-group NOPORN IN
+ do PING WWW.CISCO.COM
+ do ping www.nba.com
+ do ping www.pornhub.com
+
+TASK5: USING CISCO TO GIVE INTERNET TO ENTIRE BUILDINGS:
+
+BLDG2:192.168.102.20/24  GI2
+                            VPNPH  GI1 -- iNTERNET
+BLDG3:192.168.103.20/24  GI3
+
+TASK1: BASIC CISCO CONFIGS:
+vpnph:
+config t
+no logging console
+int gi 2
+no shut
+ip add 192.168.102.8 255.255.255.0
+line vty 0 14
+ exec-timeout 0 0
+
+TASK2: GIVE IP address and internet to VPNPH:
+config t
+int gi 1
+no shut
+ip add 192.168.108.8 255.255.255.0
+int gi 3
+no shut
+ip add 192.168.103.8 255.255.255.0
+ip  route  0.0.0.0  0.0.0.0  192.168.108.2
+ip  name-server 8.8.8.8 1.1.1.1
+do ping 8.8.8.8
+
+TASK3: NETWORK ADDRESS TRANSLATION/ NAT: GIVE INTERNET TO ENITIRE
+BUILDING/COMPANY:
+Buidg2 will Dyanmic NAT using Gi 1
+Buildg3 wil use Static NAT mapping using 192.168.108.69
+config t
+access-list 8 permit 192.168.102.0 0.0.0.255
+access-list 8 permit 192.168.103.0 0.0.0.255
+Int Gi 1
+  ip nat OUTSIDE
+Int Gi 2
+  ip nat INSIDE
+Int Gi 3
+  ip nat INSIDE
+ip   nat  inside  source static 192.168.103.20  192.168.108.69
+ip   nat  inside source list 8 interface gi 1 overload
+
+task5: Protecting webapps and websites with basic
+firewall configs:
+config t
+int Gi 3
+ no shut
+ ip add 192.168.103.8 255.255.255.0
+ ip add 192.168.103.9 255.255.255.0 Secondary
+service finger
+service tcp-small-servers
+service udp-small-servers
+ip dns server
+ip http server
+ip http secure-server
+!Make Ping EASY
+ip host www.web8.com 192.168.103.8
+ip host www.web9.com 192.168.103.9
+
+EX.1 CREATE A FIREWALL POLICY NAMED BANTAYWEB1 TO OPEN
+WWW.WEB8.COM HAS HTTP AND HTTPS AS OPEN
+WWW.WEB9.COM HAS SSH AND DNS OPEN
+   formula:       PROTOCOL    HACKER    VICTIM     PORT:
+           tcp,udp,icmp,ip     any      host       
+config t
+no ip access-list extended BANTAYWEB1
+ip access-list extended BANTAYWEB1
+   Permit  tcp  any  host www.web8.com  eq 80  log
+   Permit  tcp  any  host www.web8.com  eq 443  log
+   Permit  tcp  any  host www.web9.com  eq 22  log
+   Permit  tcp  any  host www.web9.com  eq 53  log
+Int gi 3
+ ip access-group BANTAYWEB1 in
+ do sh ip access-list BANTAYWEB1
+-------------------------------------------
+EX.2 CREATE A FIREWALL POLICY NAMED blueteam2 TO OPEN
+WWW.WEB8.COM HAS dns, ssh, http
+WWW.WEB9.COM HAS telnet, ssh, https = 6lines
+
+-------------------------------------------
+EX.3 CREATE A FIREWALL POLICY NAMED blueteam3 TO OPEN
+WWW.WEB8.COM HAS telnet,ssh,dns,http,
+WWW.WEB9.COM HAS icmp/ping, https   = 6 lines
+config t
+no ip access-list extended blueteam3
+ip access-list extended blueteam3
+   Permit  tcp  any  host www.web8.com  eq 23  log
+   Permit  tcp  any  host www.web8.com  eq 22  log
+   Permit  tcp  any  host www.web8.com  eq 53  log
+   Permit  tcp  any  host www.web8.com  eq 80 log
+   Permit  icmp any  host www.web9.comlog
+   Permit  tcp  any  host www.web9.com  eq 443  log
+int gi 3
+ ip access-group blueteam3 in
+
+-------------------------------------------
+EX.4 CREATE A FIREWALL POLICY NAMED blueteam3 TO OPEN
+WWW.WEB8.COM HAS chargen,daytime,finger,dns,ping
+WWW.WEB9.COM HAS dns,ssh,https
+
+
+
+
+
+
+
+
+
+
