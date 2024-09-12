@@ -145,12 +145,18 @@ config t
 int gi 1
 no shut
 ip add 192.168.108.8 255.255.255.0
+int gi 2
+no shut
+ip add 192.168.102.8 255.255.255.0
+ip  route  0.0.0.0  0.0.0.0  192.168.108.2
+ip  name-server 8.8.8.8 1.1.1.1
 int gi 3
 no shut
 ip add 192.168.103.8 255.255.255.0
 ip  route  0.0.0.0  0.0.0.0  192.168.108.2
 ip  name-server 8.8.8.8 1.1.1.1
 do ping 8.8.8.8
+
 
 TASK3: NETWORK ADDRESS TRANSLATION/ NAT: GIVE INTERNET TO ENITIRE
 BUILDING/COMPANY:
@@ -165,8 +171,19 @@ Int Gi 2
   ip nat INSIDE
 Int Gi 3
   ip nat INSIDE
-ip   nat  inside  source static 192.168.103.20  192.168.108.69
+no ip   nat  inside  source static 192.168.103.20  192.168.108.69
 ip   nat  inside source list 8 interface gi 1 overload
+
+Int Gi 1
+  ip nat OUTSIDE
+Int Gi 2
+  ip nat INSIDE
+Int Gi 3
+  ip nat INSIDE
+ip   nat  inside  source static 192.168.102.20  192.168.108.79
+ip   nat  inside source list 8 interface gi 1 overload
+
+
 
 task5: Protecting webapps and websites with basic
 firewall configs:
@@ -226,10 +243,17 @@ EX.4 CREATE A FIREWALL POLICY NAMED blueteam3 TO OPEN
 WWW.WEB8.COM HAS chargen,daytime,finger,dns,ping
 WWW.WEB9.COM HAS dns,ssh,https
 
-
-
-
-
+config t
+no ip access-list extended BANTAYWEB1
+ip access-list extended BANTAYWEB1
+   Permit  tcp  any  host www.web8.com  eq 80  log
+   Permit  tcp  any  host www.web8.com  eq 443  log
+Permit  tcp  any  host www.web9.com  eq 22  log
+Permit  tcp  any  host www.web9.com  eq 53  log
+int gi 1
+ ip access-group BANTAYWEB1 in
+   
+   
 
 
 
