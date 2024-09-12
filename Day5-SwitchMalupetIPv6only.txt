@@ -1,3 +1,11 @@
+IPV6 SUBNETTING
+EX1: Subnet fafa:caca:dada:bebe::/64 into Three Offices:
+Rivan CAI Menthod: Convert, Add, iChamba
+Convert: Three offices is 2 bits
+AddtoOrig/: /64 + /2 = /66
+iChambaMO:
+
+
 Task1: 5 mins answers:
 #PAGE 17 
 
@@ -701,5 +709,36 @@ how to get certified:
 2. Lab: NAT and DHCP:
 
 3. ask sa CHAT: "latest reivewer"
+
+
+Ex6: Subnet fafa
+CAI: 
+
+CONFIGURE IPV6
+config t
+ipv6 unicast-routing
+int loopback 1
+ipv6 address fafa:caca:dada:bebe::1/73
+!
+int loopback 2
+ipv6 address fafa:caca:dada:bebe:0080:1/73
+!
+int loopback 3
+ipv6 address fafa:caca:dada:bebe:0100:1/73
+!
+int loopback 4
+ipv6 address fafa:caca:dada:bebe:0180:1/73
+!
+int loopback 5
+ipv6 address fafa:caca:dada:bebe:0200:1/73
+!
+int loopback 6
+ipv6 address fafa:caca:dada:bebe:0280:1/73
+!
+int loopback 7
+ipv6 address fafa:caca:dada:bebe:0300:1/73
+!
+int loopback 8
+ipv6 address fafa:caca:dada:bebe:0380:1/73
 
 
